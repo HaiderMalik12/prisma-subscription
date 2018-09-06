@@ -7,15 +7,14 @@ import { getMainDefinition } from 'apollo-utilities';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from 'react-apollo';
 
-import NewMessageForm from './NewMessageForm';
-import MessageList from './MessageList';
+import NewMessageForm from './components/NewMessageForm';
+import MessageList from './components/MessageList';
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000'
 });
 const wsLink = new WebSocketLink({
-  uri:
-    'ws://localhost:4000',
+  uri: 'ws://localhost:4000',
   options: {
     reconnect: true
   }
