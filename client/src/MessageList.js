@@ -1,6 +1,8 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import MessageItem from './components/MessageItem';
+import MessageListView from './components/MessageListView';
 
 const query = gql`
   {
@@ -26,31 +28,6 @@ const subscription = gql`
     }
   }
 `;
-
-const MessageItem = ({ message }) => (
-  <li style={{ borderTop: '1px solid lightgray' }}>
-    <p>
-      {message.author || 'Anonymous'}: {message.text} (
-      {new Date(message.createdAt).toLocaleString()})
-    </p>
-  </li>
-);
-
-const MessageListView = class extends React.PureComponent {
-  componentDidMount() {
-    this.props.subscribeToMore();
-  }
-  render() {
-    const { data } = this.props;
-    return (
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        {data.allMessages.map(message => (
-          <MessageItem key={message.id} message={message} />
-        ))}
-      </ul>
-    );
-  }
-};
 
 const MessageList = () => (
   <Query query={query}>
