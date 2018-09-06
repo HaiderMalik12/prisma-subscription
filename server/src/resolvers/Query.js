@@ -8,7 +8,7 @@ function post(parent, { id }, ctx, info) {
   return ctx.db.query.post({ where: { id } }, info);
 }
 function allMessages(parent, { first, orderBy }, ctx, info) {
-  return ctx.db.query.messages({ first, orderBy });
+  return ctx.db.query.messages({ first, orderBy }, info);
 }
 module.exports = {
   feed,

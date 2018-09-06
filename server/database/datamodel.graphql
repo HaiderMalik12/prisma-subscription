@@ -8,11 +8,5 @@ type Message {
   id: ID! @unique
   createdAt: DateTime!
   text: String!
-  author: User
-}
-type User {
-  createdAt: DateTime!
-  id: ID! @unique
-  updatedAt: DateTime!
-  messages: [Message!]!
+  author: String!
 }
