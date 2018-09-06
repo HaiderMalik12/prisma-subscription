@@ -2,9 +2,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import MessageItem from './MessageItem';
-import MessageListView from './MessageListView';
 
-const query = gql`
+export const query = gql`
   {
     allMessages(orderBy: createdAt_DESC, first: 20) {
       id
@@ -32,23 +31,26 @@ const subscription = gql`
 const MessageList = () => (
   <Query query={query}>
     {({ loading, error, data, subscribeToMore }) => {
-      debugger;
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error: {error.message}</p>;
-      const more = () =>
-        subscribeToMore({
-          document: subscription,
-          updateQuery: (prev, { subscriptionData }) => {
-            debugger;
-            if (!subscriptionData.data) return prev;
-            const { mutation, node } = subscriptionData.data.newMessage;
-            if (mutation !== 'CREATED') return prev;
-            return Object.assign({}, prev, {
-              allMessages: [node, ...prev.allMessages].slice(0, 20)
-            });
-          }
-        });
-      return <MessageListView data={data} subscribeToMore={more} />;
+      subscribeToMore({
+        document: subscription,
+        updateQuery: (prev, { subscriptionData }) => {
+          if (!subscriptionData.data) return prev;
+          const { mutation, node } = subscriptionData.data.newMessage;
+          if (mutation !== 'CREATED') return prev;
+          return Object.assign({}, prev, {
+            allMessages: [node, ...prev.allMessages].slice(0, 20)
+          });
+        }
+      });
+      return (
+        <React.Fragment>
+          {data.allMessages.map(message => (
+            <MessageItem key={message.id} message={message} />
+          ))}
+        </React.Fragment>
+      );
     }}
   </Query>
 );
