@@ -15,4 +15,5 @@ type Mutation {
 }
 type Subscription {
   newPost: PostSubscriptionPayload
+  newMessage: MessageSubscriptionPayload
 }

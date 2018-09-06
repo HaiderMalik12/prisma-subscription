@@ -14,8 +14,8 @@ const query = gql`
 `;
 
 const subscription = gql`
-  subscription Message {
-    Message {
+  subscription NewMessage {
+    newMessage {
       mutation
       node {
         id
@@ -62,8 +62,9 @@ const MessageList = () => (
         subscribeToMore({
           document: subscription,
           updateQuery: (prev, { subscriptionData }) => {
+            debugger;
             if (!subscriptionData.data) return prev;
-            const { mutation, node } = subscriptionData.data.Message;
+            const { mutation, node } = subscriptionData.data.newMessage;
             if (mutation !== 'CREATED') return prev;
             return Object.assign({}, prev, {
               allMessages: [node, ...prev.allMessages].slice(0, 20)

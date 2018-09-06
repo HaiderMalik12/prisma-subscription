@@ -14,3 +14,20 @@ const newPost = {
 module.exports = {
   newPost
 };
+function subscribeToNewMessage(parent, args, ctx, info) {
+  return ctx.db.subscription.message(
+    {
+      where: {
+        mutation_in: ['CREATED']
+      }
+    },
+    info
+  );
+}
+const newMessage = {
+  subscribe: subscribeToNewMessage
+};
+module.exports = {
+  newPost,
+  newMessage
+};
