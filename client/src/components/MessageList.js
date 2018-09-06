@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import MessageItem from './MessageItem';
 
-export const query = gql`
+export const ALL_MESSAGES_QUERY = gql`
   {
     allMessages(orderBy: createdAt_DESC, first: 20) {
       id
@@ -14,7 +14,7 @@ export const query = gql`
   }
 `;
 
-const subscription = gql`
+const NEW_MESSAGE_SUBSCRIPTION = gql`
   subscription NewMessage {
     newMessage {
       mutation
@@ -29,12 +29,12 @@ const subscription = gql`
 `;
 
 const MessageList = () => (
-  <Query query={query}>
+  <Query query={ALL_MESSAGES_QUERY}>
     {({ loading, error, data, subscribeToMore }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error: {error.message}</p>;
       subscribeToMore({
-        document: subscription,
+        document: NEW_MESSAGE_SUBSCRIPTION,
         updateQuery: (prev, { subscriptionData }) => {
           if (!subscriptionData.data) return prev;
           const { mutation, node } = subscriptionData.data.newMessage;

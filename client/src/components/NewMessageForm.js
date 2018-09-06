@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { query } from './MessageList';
+import { ALL_MESSAGES_QUERY } from './MessageList';
 
 const CREATE_MESSAGE = gql`
   mutation createMessage($text: String!, $author: String!) {
@@ -16,7 +16,7 @@ const NewMessageForm = () => (
     mutation={CREATE_MESSAGE}
     update={(cache, { createMessage }) => {
       const data = cache.readQuery({
-        query: query,
+        query: ALL_MESSAGES_QUERY,
         variables: {
           first: 20,
           orderBy: 'createdAt_DESC'
@@ -24,7 +24,7 @@ const NewMessageForm = () => (
       });
       data.allMessages.unshift(createMessage);
       cache.writeQuery({
-        query: query,
+        query: ALL_MESSAGES_QUERY,
         data,
         variables: {
           first: 20,
