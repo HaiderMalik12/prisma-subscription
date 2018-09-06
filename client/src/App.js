@@ -1,21 +1,44 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { ApolloClient } from 'apollo-client';
+import { split } from 'apollo-link';
+import { HttpLink } from 'apollo-link-http';
+import { WebSocketLink } from 'apollo-link-ws';
+import { getMainDefinition } from 'apollo-utilities';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloProvider } from 'react-apollo';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+import NewMessageForm from './NewMessageForm';
+import MessageList from './MessageList';
+
+const httpLink = new HttpLink({
+  uri: 'http://localhost:4000'
+});
+const wsLink = new WebSocketLink({
+  uri:
+    'ws://localhost:4000',
+  options: {
+    reconnect: true
   }
-}
+});
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink
+);
+const cache = new InMemoryCache();
+const client = new ApolloClient({ link, cache });
+
+const App = () => (
+  <ApolloProvider client={client}>
+    <div>
+      <h1>Simple Chat</h1>
+      <NewMessageForm />
+      <MessageList />
+    </div>
+  </ApolloProvider>
+);
 
 export default App;
