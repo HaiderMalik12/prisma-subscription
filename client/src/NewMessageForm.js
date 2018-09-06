@@ -23,9 +23,27 @@ const NewMessageForm = () => (
       };
       return (
         <form onSubmit={onSubmit}>
-          <input name="author" placeholder="Author" />:
-          <input name="text" placeholder="Text" />
-          <button type="submit">Send</button>
+          <div className="row">
+            <div className="col-4">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter your name"
+                name="text"
+              />
+            </div>
+            <div className="col-6">
+              <input
+                name="author"
+                type="text"
+                className="form-control"
+                placeholder="Enter your message"
+              />
+            </div>
+            <div class="col-2">
+              <button className="btn btn-primary">Send</button>
+            </div>
+          </div>
         </form>
       );
     }}
