@@ -7,9 +7,12 @@ function drafts(parent, args, ctx, info) {
 function post(parent, { id }, ctx, info) {
   return ctx.db.query.post({ where: { id } }, info);
 }
-
+function allMessages(parent, { first, orderBy }, ctx, info) {
+  return ctx.db.query.messages({ first, orderBy });
+}
 module.exports = {
   feed,
   drafts,
-  post
+  post,
+  allMessages
 };
