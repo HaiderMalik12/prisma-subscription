@@ -7,3 +7,6 @@ type Query {
 type Mutation {
   createMessage(text: String!, author: String!): Message!
 }
+type Subscription {
+  newMessage: MessageSubscriptionPayload
+}
