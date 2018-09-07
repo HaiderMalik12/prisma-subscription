@@ -14,36 +14,11 @@ export const ALL_MESSAGES_QUERY = gql`
   }
 `;
 
-const NEW_MESSAGE_SUBSCRIPTION = gql`
-  subscription NewMessage {
-    newMessage {
-      mutation
-      node {
-        id
-        createdAt
-        text
-        author
-      }
-    }
-  }
-`;
-
 const MessageList = () => (
   <Query query={ALL_MESSAGES_QUERY}>
     {({ loading, error, data, subscribeToMore }) => {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error: {error.message}</p>;
-      subscribeToMore({
-        document: NEW_MESSAGE_SUBSCRIPTION,
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev;
-          const { mutation, node } = subscriptionData.data.newMessage;
-          if (mutation !== 'CREATED') return prev;
-          return Object.assign({}, prev, {
-            allMessages: [node, ...prev.allMessages].slice(0, 20)
-          });
-        }
-      });
       return (
         <React.Fragment>
           {data.allMessages.map(message => (
