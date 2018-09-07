@@ -7,6 +7,9 @@ const CREATE_MESSAGE = gql`
   mutation createMessage($text: String!, $author: String!) {
     createMessage(text: $text, author: $author) {
       id
+      text
+      author
+      createdAt
     }
   }
 `;
@@ -59,18 +62,18 @@ class NewMessageForm extends Component {
                     type="text"
                     className="form-control"
                     placeholder="Enter your name"
-                    value={this.state.text}
-                    name="text"
+                    value={this.state.author}
+                    name="author"
                     onChange={this.onChangeHandler}
                   />
                 </div>
                 <div className="col-6">
                   <input
-                    name="author"
+                    name="text"
                     type="text"
                     className="form-control"
                     placeholder="Enter your message"
-                    value={this.state.author}
+                    value={this.state.text}
                     onChange={this.onChangeHandler}
                   />
                 </div>
